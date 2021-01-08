@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#define MAX_DELAY_TIME 2
 
 //==============================================================================
 /**
@@ -54,6 +55,12 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+
+    float* mCircularBufferLeft;
+    float* mCircularBufferRight;
+    int mCircularBufferLenght = 0;
+    int mCircularBufferWriteHead;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeDelayAudioProcessor)
 };

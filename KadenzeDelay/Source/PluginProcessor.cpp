@@ -22,10 +22,23 @@ KadenzeDelayAudioProcessor::KadenzeDelayAudioProcessor()
                        )
 #endif
 {
+    mCircularBufferLeft = nullptr;
+    mCircularBufferRight = nullptr;
+    mCircularBufferLenght = 0;
+    mCircularBufferWriteHead = 0;
 }
 
 KadenzeDelayAudioProcessor::~KadenzeDelayAudioProcessor()
 {
+    if (mCircularBufferLeft != nullptr) {
+        delete[] mCircularBufferLeft;
+        mCircularBufferLeft = nullptr;
+    }
+
+    if (mCircularBufferRight != nullptr) {
+        delete[] mCircularBufferRight;
+        mCircularBufferRight = nullptr;
+    }
 }
 
 //==============================================================================
@@ -93,8 +106,24 @@ void KadenzeDelayAudioProcessor::changeProgramName (int index, const juce::Strin
 //==============================================================================
 void KadenzeDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    mCircularBufferLenght = sampleRate * MAX_DELAY_TIME;
+
+    if (mCircularBufferLeft == nullptr) {
+        mCircularBufferLeft = new float[mCircularBufferLenght];
+        for (int i = 0; i < mCircularBufferLenght; i++) {
+            mCircularBufferLeft[i] = 0;
+        }
+
+    }
+    //autre facon d initialiser le mCircularBufferLeft
+    // zeromem( mCircularBufferLeft, mCircularBufferLenght * sizeof(float));
+
+    if (mCircularBufferRight == nullptr) {
+        mCircularBufferRight = new float[mCircularBufferLenght];
+        for (int i = 0; i < mCircularBufferLenght; i++) {
+            mCircularBufferRight[i] = 0;
+        }
+    }
 }
 
 void KadenzeDelayAudioProcessor::releaseResources()
@@ -142,18 +171,19 @@ void KadenzeDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+    float* leftChannel = buffer.getWritePointer(0);
+    float* rightChannel = buffer.getWritePointer(1);
 
-        // ..do something to the data...
+    for (int i = 0; i < buffer.getNumSamples(); i++) {
+        mCircularBufferLeft[mCircularBufferWriteHead] = leftChannel[i];
+        mCircularBufferRight[mCircularBufferWriteHead] = rightChannel[i];
+
+        mCircularBufferWriteHead++;
+
+        if (mCircularBufferWriteHead == mCircularBufferLenght) mCircularBufferWriteHead = 0;
+
     }
+    
 }
 
 //==============================================================================
