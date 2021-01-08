@@ -62,6 +62,9 @@ private:
     int mCircularBufferWriteHead;
     int mDelayTimeInSamples;
     float mDelayReadHead;
+    float mFeedbackLeft;
+    float mFeedbackRight;
+    float mDrywet;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeDelayAudioProcessor)
