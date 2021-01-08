@@ -26,6 +26,8 @@ KadenzeDelayAudioProcessor::KadenzeDelayAudioProcessor()
     mCircularBufferRight = nullptr;
     mCircularBufferLenght = 0;
     mCircularBufferWriteHead = 0;
+    mDelayTimeInSamples = 0;
+    mDelayReadHead = 0;
 }
 
 KadenzeDelayAudioProcessor::~KadenzeDelayAudioProcessor()
@@ -107,6 +109,7 @@ void KadenzeDelayAudioProcessor::changeProgramName (int index, const juce::Strin
 void KadenzeDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     mCircularBufferLenght = sampleRate * MAX_DELAY_TIME;
+    mDelayTimeInSamples = sampleRate * 0.5;
 
     if (mCircularBufferLeft == nullptr) {
         mCircularBufferLeft = new float[mCircularBufferLenght];
@@ -177,6 +180,15 @@ void KadenzeDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (int i = 0; i < buffer.getNumSamples(); i++) {
         mCircularBufferLeft[mCircularBufferWriteHead] = leftChannel[i];
         mCircularBufferRight[mCircularBufferWriteHead] = rightChannel[i];
+
+        mDelayReadHead = mCircularBufferWriteHead - mDelayTimeInSamples;
+
+        if (mDelayReadHead < 0) {
+            mDelayReadHead += mCircularBufferLenght;
+        }
+
+        buffer.addSample(0, i, mCircularBufferLeft[(int)mDelayReadHead]);
+        buffer.addSample(1, i, mCircularBufferRight[(int)mDelayReadHead]);
 
         mCircularBufferWriteHead++;
 
