@@ -11,6 +11,8 @@
 #include <JuceHeader.h>
 #define MAX_DELAY_TIME 2
 
+using namespace juce;
+
 //==============================================================================
 /**
 */
@@ -56,6 +58,10 @@ public:
 
 private:
 
+    AudioParameterFloat* mDryWetParameter;
+    AudioParameterFloat* mFeedbackParameter;
+    AudioParameterFloat* mDelayTimeParameter;
+
     float* mCircularBufferLeft;
     float* mCircularBufferRight;
     int mCircularBufferLenght = 0;
@@ -64,7 +70,9 @@ private:
     float mDelayReadHead;
     float mFeedbackLeft;
     float mFeedbackRight;
-    float mDrywet;
+    //float mDrywet;
+
+
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KadenzeDelayAudioProcessor)
