@@ -33,31 +33,31 @@ KadenzeDelayAudioProcessorEditor::KadenzeDelayAudioProcessorEditor (KadenzeDelay
     mDryWetSlider.onDragStart = [dryWetParameter] {dryWetParameter->beginChangeGesture(); };
     mDryWetSlider.onDragEnd = [dryWetParameter] {dryWetParameter->endChangeGesture(); };
 
-    ////mFeedbackSlider
-    //AudioParameterFloat* feedbackParameter = (AudioParameterFloat*)params.getUnchecked(1);
-    //mFeedbackSlider.setBounds(100, 0, 100, 100);
-    //mFeedbackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalDrag);
-    //mFeedbackSlider.setRange(feedbackParameter->range.start, feedbackParameter->range.end);
-    //mFeedbackSlider.setValue(*feedbackParameter);
-    //mFeedbackSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    //addAndMakeVisible(mFeedbackSlider);
+    //mFeedbackSlider
+    AudioParameterFloat* feedbackParameter = (AudioParameterFloat*)params.getUnchecked(1);
+    mFeedbackSlider.setBounds(100, 0, 100, 100);
+    mFeedbackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalDrag);
+    mFeedbackSlider.setRange(feedbackParameter->range.start, feedbackParameter->range.end);
+    mFeedbackSlider.setValue(*feedbackParameter);
+    mFeedbackSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(mFeedbackSlider);
 
-    //mFeedbackSlider.onValueChange = [this, feedbackParameter] {*feedbackParameter = mFeedbackSlider.getValue(); };
-    //mFeedbackSlider.onDragStart = [feedbackParameter] {feedbackParameter->beginChangeGesture(); };
-    //mFeedbackSlider.onDragEnd = [feedbackParameter] {feedbackParameter->endChangeGesture(); };
+    mFeedbackSlider.onValueChange = [this, feedbackParameter] {*feedbackParameter = mFeedbackSlider.getValue(); };
+    mFeedbackSlider.onDragStart = [feedbackParameter] {feedbackParameter->beginChangeGesture(); };
+    mFeedbackSlider.onDragEnd = [feedbackParameter] {feedbackParameter->endChangeGesture(); };
 
-    ////mDelayTimeSlider
-    //AudioParameterFloat* DelayTimeParameter = (AudioParameterFloat*)params.getUnchecked(2);
-    //mDelayTimeSlider.setBounds(200, 0, 100, 100);
-    //mDelayTimeSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalDrag);
-    //mDelayTimeSlider.setRange(DelayTimeParameter->range.start, DelayTimeParameter->range.end);
-    //mDelayTimeSlider.setValue(*DelayTimeParameter);
-    //mDelayTimeSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    //addAndMakeVisible(mDelayTimeSlider);
+    //mDelayTimeSlider
+    AudioParameterFloat* DelayTimeParameter = (AudioParameterFloat*)params.getUnchecked(2);
+    mDelayTimeSlider.setBounds(200, 0, 100, 100);
+    mDelayTimeSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalDrag);
+    mDelayTimeSlider.setRange(DelayTimeParameter->range.start, DelayTimeParameter->range.end);
+    mDelayTimeSlider.setValue(*DelayTimeParameter);
+    mDelayTimeSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(mDelayTimeSlider);
 
-    //mDelayTimeSlider.onValueChange = [this, DelayTimeParameter] {*DelayTimeParameter = mDelayTimeSlider.getValue(); };
-    //mDelayTimeSlider.onDragStart = [DelayTimeParameter] {DelayTimeParameter->beginChangeGesture(); };
-    //mDelayTimeSlider.onDragEnd = [DelayTimeParameter] {DelayTimeParameter->endChangeGesture(); };
+    mDelayTimeSlider.onValueChange = [this, DelayTimeParameter] {*DelayTimeParameter = mDelayTimeSlider.getValue(); };
+    mDelayTimeSlider.onDragStart = [DelayTimeParameter] {DelayTimeParameter->beginChangeGesture(); };
+    mDelayTimeSlider.onDragEnd = [DelayTimeParameter] {DelayTimeParameter->endChangeGesture(); };
 
 
 
