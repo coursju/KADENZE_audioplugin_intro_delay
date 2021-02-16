@@ -58,6 +58,7 @@ public:
     float lin_interp(float sample_x, float sample_x1, float inPhase);
 
 private:
+    float mDelayTimeSmoothed;
 
     AudioParameterFloat* mDryWetParameter;
     AudioParameterFloat* mFeedbackParameter;

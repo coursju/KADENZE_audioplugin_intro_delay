@@ -42,6 +42,7 @@ KadenzeDelayAudioProcessor::KadenzeDelayAudioProcessor()
         0.5));
 
 
+    mDelayTimeSmoothed = 0;
 
     mCircularBufferLeft = nullptr;
     mCircularBufferRight = nullptr;
@@ -151,6 +152,10 @@ void KadenzeDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
             mCircularBufferRight[i] = 0;
         }
     }
+
+
+    //pour adoucir le son lors de la rotation du parameter
+    mDelayTimeSmoothed = *mDelayTimeParameter;
 }
 
 void KadenzeDelayAudioProcessor::releaseResources()
@@ -205,6 +210,9 @@ void KadenzeDelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     float* rightChannel = buffer.getWritePointer(1);
 
     for (int i = 0; i < buffer.getNumSamples(); i++) {
+        mDelayTimeSmoothed = mDelayTimeSmoothed - 0.001 * (mDelayTimeSmoothed - *mDelayTimeParameter);
+        mDelayTimeInSamples = getSampleRate() * mDelayTimeSmoothed;
+
         mCircularBufferLeft[mCircularBufferWriteHead] = leftChannel[i] + mFeedbackLeft;
         mCircularBufferRight[mCircularBufferWriteHead] = rightChannel[i] + mFeedbackRight;
 
